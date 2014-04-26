@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+        body{
+          background:#2EADB6;
+        }
+        h2 {
+            font-size: 30px;
+            color:blue;
+            text-align: center;
+        }
+        button {
+          border: solid 2px black;
+          border-radius:10px;
+          display: block;
+          margin-left:auto;
+          margin-right:auto;
+          margin-top:2px;
+          width:200px;
+          height:50px;
+          background: blue;
+          color: white;
+          font-size:25px;
+        }
+        input{
+          text-align:center;
+          border: solid 2px green;
+          display: block;
+          margin-left:auto;
+          margin-right:auto;
+          width: 550px;
+          height:40px;
+          font-size:20px;
+        }
+        input:focus{
+            text-align: left;
+            outline-color:magenta;
+        }
+        </style>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <script type='text/javascript' src='https://cdn.firebase.com/js/client/1.0.11/firebase.js'></script>
+        <script type="text/javascript">
+        var firebase;
+        var compliments = ["You are cool","You are awesome", "You are the best", "You are nice"];
+        function showRandomCompliment(){
+          var index = 0;
+          index = Math.floor(Math.random() * compliments.length);
+          $("h2").text(compliments[index]);
+        }
+        function notSwearing(){
+          var said = $("input").val();
+          if (said.indexOf("heck")>=0){
+            return false;
+          }
+          if (said.indexOf("darn")>=0){
+            return false;
+          }
+          return true;
+        }
+        function submitClicked(){
+            var inputBox;
+            inputBox = $("input").val();
+            if ($("input").val().length>0 && notSwearing()) {
+              compliments.push(inputBox);
+              firebase.push(inputBox);
+              showRandomCompliment();
+              $("input").val("");
+            }
+        }
+        function setup(){
+            firebase = new Firebase("https://compliments.firebaseio.com/")
+            $("button").click(submitClicked);
+        }
+        $(document).ready(setup);
+        </script>
+    </head>
+    <body>
+        <h2>you are <em>amazing</em>!</h2>
+        <input placeholder="Type a Compliment">
+        <button>submit</button>
+    </body>
+</html>
